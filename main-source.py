@@ -11,10 +11,15 @@ else:
     with open('settings.json', 'w') as fileSettings:
         botSettings = {
             'prefix':',',
+            'status':'DMs Open'
         }
         json.dump(botSettings, fileSettings, indent=2)
 
-client = commands.Bot(command_prefix=botSettings['prefix'])
+
+intents = discord.Intents.default()
+intents.members = True
+intents.messages = True
+client = commands.Bot(intents=intents, command_prefix=botSettings['prefix'])
 
 def im_owner(ctx):
     return ctx.message.author.id == 224131162996473856
@@ -29,6 +34,8 @@ async def on_disconnect():
 
 
 
+
+#cogs owner command
 @commands.command(pass_context=True)
 @commands.check(im_owner)
 async def reloado(ctx):
@@ -53,7 +60,7 @@ async def on_command_error(ctx, error):
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
-        print('da')
+
 
 if os.path.exists('token.json'):
     with open('token.json') as fileToken:
